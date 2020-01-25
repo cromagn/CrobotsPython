@@ -21,6 +21,9 @@ Version History:
 
 import os
 import sys
+#CR
+import matplotlib
+import matplotlib.pyplot as plt
 
 __author__ = 'iw6dgm'
 
@@ -40,12 +43,45 @@ def compare(a, b):
 
 def print_report(robots):
     robots.sort(compare, None, True)
-    print '#\tName\t\tGames\t\tWins\t\tTies2\t\tTies3\t\tTies4\t\tLost\t\tPoints\t\tEff%'
+    #print '#\tName\t\tGames\t\tWins\t\tTies2\t\tTies3\t\tTies4\t\tLost\t\tPoints\t\tEff%'
+    print '#\tName\tGames\tWins\tTies2\tTies3\tTies4\tLost\tPoints\tEff%'
     i = 0
     for values in robots:
         i += 1
-        print '%i\t%s\t\t%i\t\t%i\t\t%i\t\t%i\t\t%i\t\t%i\t\t%i\t\t%.3f' % (i, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8])
+        #print '%i\t%s\t\t%i\t\t%i\t\t%i\t\t%i\t\t%i\t\t%i\t\t%i\t\t%.3f' % (i, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8])
+        print '%i\t%s\t%i\t%i\t%i\t%i\t%i\t%i\t%i\t%.3f' % (i, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8])
 
+def plot_report(robots):
+    robots.sort(compare, None, True)
+    rname=[]
+    totals=[]
+    wins = []
+    points=[]
+    eff=[]
+    #print '#\tName\t\tGames\t\tWins\t\tTies2\t\tTies3\t\tTies4\t\tLost\t\tPoints\t\tEff%'
+    #print '#\tName\tGames\tWins\tTies2\tTies3\tTies4\tLost\tPoints\tEff%'
+    fig, (pointp, winsp, effp) = plt.subplots(3,sharex=True)
+    fig.suptitle('crobots')
+ 
+    i = 0
+    for values in robots:
+        i += 1
+        rname.append(values[0])
+        totals.append(values[1])
+        wins.append(values[2])
+        points.append(values[7])
+        eff.append(values[8])
+        #print '%i\t%s\t\t%i\t\t%i\t\t%i\t\t%i\t\t%i\t\t%i\t\t%i\t\t%.3f' % (i, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8])
+        #print '%i\t%s\t%i\t%i\t%i\t%i\t%i\t%i\t%i\t%.3f' % (i, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8])
+    rname_pos = [i for i, _ in enumerate(rname)]
+    winsp.bar(rname_pos, wins, color='green')
+    winsp.set(ylabel='wins')
+    pointp.bar(rname_pos, points, width=0.8,  color='gray')
+    pointp.set(ylabel='point')
+    effp.bar(rname_pos,eff, color='red')
+    effp.set(ylabel='efficiency')
+    plt.xticks(rname_pos, rname)
+    plt.show()
 
 def show_report(db, type):
     robots = []
@@ -62,6 +98,7 @@ def show_report(db, type):
             eff = 100.0 * points / (schema4[type][0] * games)
         robots.append([name, games, wins, ties2, ties3, ties4, games - wins - (ties2+ties3+ties4), points, eff])
     print_report(robots)
+    plot_report(robots)
 
 
 def get_name(row):
