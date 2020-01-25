@@ -71,7 +71,9 @@ Robot binary files will be loaded from *'./'* directory, so you can specify the 
 
 Run
 ---
-
+in winzozz (windows)
+robots in the same folder than this script
+---
 This is the list of all available Crobots Python scripts. They share a lot of code and a common behavior. Command line options are pretty much the same for every of them.
 You can interrupt (and resume, if database support is enabled) a tournament by creating a file *Crobots.stop* within the same running directory, e.g.:
 
