@@ -29,6 +29,7 @@ Version History:
 """
 
 import os.path
+import ntpath   #TRY TO MANAGE WINZOZZ
 import shlex
 import subprocess
 import sys
@@ -62,7 +63,8 @@ def init_db():
     global configuration, dbase
     dbase = dict()
     for s in configuration.listRobots:
-        key = os.path.basename(s)
+        key = ntpath.basename(s)
+        # print key
         dbase[key] = [key, 0, 0, 0, 0, 0]
 
 
@@ -71,7 +73,7 @@ def update_db(lines):
     global dbase
     robots = parse_log_file(lines)
     for r in robots.values():
-        name = r[0]
+        name = ntpath.basename(r[0]) #CARLO TRY TO MANAGE WINZOZZ
         values = dbase[name]
         values[0] = name
         values[1] += r[1]
@@ -88,6 +90,7 @@ def run_crobots():
     procs = []
     # spawn processes
     for s in spawnList:
+        #print s carlo
         with open(os.devnull, 'w') as devnull:
             try:
                 procs.append(subprocess.Popen(shlex.split(s), stdout=subprocess.PIPE, stderr=devnull))
@@ -97,6 +100,7 @@ def run_crobots():
     lines = []
     for proc in procs:
         output, unused_err = proc.communicate()
+        #print output CARLO
         for s in output.split('\n'):
             lines.append(s)
     update_db(lines)
@@ -165,6 +169,7 @@ if action == 'test':
 
 def run_tournament(ptype, num, matchParam):
     global tmppath, logpath, robotPath, configuration, crobotsCmdLine
+   
     print '%s Starting %s... ' % (time.ctime(), ptype.upper())
     init_db()
     param = crobotsCmdLine % matchParam
